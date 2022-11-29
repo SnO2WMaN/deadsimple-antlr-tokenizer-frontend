@@ -109,96 +109,99 @@ export const App: React.FC = () => {
   }, [cursor, result]);
 
   return (
-    <main
+    <div
       className={clsx(
         ["w-full"],
         ["min-h-screen"],
-        ["flex"],
-        ["p-4"],
-        ["gap-x-4"],
+        ["py-4"],
       )}
     >
-      <div className={clsx(["flex"], ["flex-col"], ["items-start"])}>
-        <textarea
-          value={input}
-          className={clsx(
-            ["w-[512px]"],
-            ["h-[256px]"],
-            ["p-2"],
-            ["font-mono"],
-            ["resize-none"],
-            ["border"],
-            ["text-sm"],
-          )}
-          onChange={(e) => {
-            setResult(null);
-            setInput(e.target.value);
-          }}
-        >
-        </textarea>
-        <button
-          className={clsx(
-            ["mt-2"],
-            ["bg-blue-400", "hover:bg-blue-500"],
-            ["text-blue-50", "hover:text-blue-100"],
-            ["px-2"],
-            ["py-1"],
-            ["rounded"],
-          )}
-          onClick={() => {
-            handle();
-          }}
-        >
-          parse
-        </button>
-      </div>
-      <div className={clsx(["flex-grow"], ["flex-shrink-0"])}>
-        <div className={clsx(["text-sm"], ["font-mono"])}>
-          {!cursor && <span>pick!</span>}
-          {cursor && <span>{cursor.line},{cursor.column}</span>}
+      <main
+        className={clsx(["container"], ["mx-auto"], ["flex", ["flex-col", "lg:flex-row"]], ["gap-x-4"], ["gap-y-4"])}
+      >
+        <div className={clsx(["flex"], ["flex-col"], ["items-start"])}>
+          <textarea
+            value={input}
+            className={clsx(
+              ["w-[512px]"],
+              ["h-[256px]"],
+              ["p-2"],
+              ["font-mono"],
+              ["resize-none"],
+              ["border"],
+              ["text-sm"],
+            )}
+            onChange={(e) => {
+              setResult(null);
+              setInput(e.target.value);
+            }}
+          >
+          </textarea>
+          <button
+            className={clsx(
+              ["mt-2"],
+              ["bg-blue-400", "hover:bg-blue-500"],
+              ["text-blue-50", "hover:text-blue-100"],
+              ["px-2"],
+              ["py-1"],
+              ["rounded"],
+            )}
+            onClick={() => {
+              handle();
+            }}
+          >
+            parse
+          </button>
         </div>
-        <div
-          className={clsx(
-            ["mt-2"],
-            ["p-2"],
-            ["select-none"],
-            ["border"],
-          )}
-        >
-          {parsed?.split("\n").map((line, l) => (
-            <div key={l} className={clsx(["font-mono"], ["text-lg"])}>
-              {line.split("").map((char, c) => (
-                <Char
-                  key={`${l}-${c}`}
-                  c={char}
-                  handle={() => setCursor({ line: l + 1, column: c })}
-                  clear={() => setCursor(null)}
-                  vari={vari
-                    ? ((vari[0][0] <= l + 1 && l + 1 <= vari[1][0]) && (vari[0][1] <= c && c <= vari[1][1]))
-                    : false}
-                  func={func
-                    ? ((func[0][0] <= l + 1 && l + 1 <= func[1][0]) && (func[0][1] <= c && c <= func[1][1]))
-                    : false}
-                  appl={appl
-                    ? ((appl[0][0] <= l + 1 && l + 1 <= appl[1][0]) && (appl[0][1] <= c && c <= appl[1][1]))
-                    : false}
-                />
-              ))}
-            </div>
-          ))}
+        <div className={clsx(["flex-grow"], ["flex-shrink-0"])}>
+          <div className={clsx(["text-sm"], ["font-mono"])}>
+            {!cursor && <span>pick!</span>}
+            {cursor && <span>{cursor.line},{cursor.column}</span>}
+          </div>
+          <div
+            className={clsx(
+              ["mt-2"],
+              ["p-2"],
+              ["select-none"],
+              ["border"],
+            )}
+          >
+            {parsed?.split("\n").map((line, l) => (
+              <div key={l} className={clsx(["font-mono"], ["text-lg"])}>
+                {line.split("").map((char, c) => (
+                  <Char
+                    key={`${l}-${c}`}
+                    c={char}
+                    handle={() => setCursor({ line: l + 1, column: c })}
+                    clear={() => setCursor(null)}
+                    vari={vari
+                      ? ((vari[0][0] <= l + 1 && l + 1 <= vari[1][0]) && (vari[0][1] <= c && c <= vari[1][1]))
+                      : false}
+                    func={func
+                      ? ((func[0][0] <= l + 1 && l + 1 <= func[1][0]) && (func[0][1] <= c && c <= func[1][1]))
+                      : false}
+                    appl={appl
+                      ? ((appl[0][0] <= l + 1 && l + 1 <= appl[1][0]) && (appl[0][1] <= c && c <= appl[1][1]))
+                      : false}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+          <div
+            className={clsx(
+              ["mt-2"],
+              ["p-2"],
+              ["select-none"],
+              ["border"],
+            )}
+          >
+            {result?.map((txt, i) => (
+              <div key={i} className={clsx(["font-mono"], ["text-xs"])}>{JSON.stringify(txt)}</div>
+            ))}
+          </div>
         </div>
-        <div
-          className={clsx(
-            ["mt-2"],
-            ["p-2"],
-            ["select-none"],
-            ["border"],
-          )}
-        >
-          {result?.map((txt, i) => <div key={i} className={clsx(["font-mono"], ["text-xs"])}>{JSON.stringify(txt)}
-          </div>)}
-        </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 };
